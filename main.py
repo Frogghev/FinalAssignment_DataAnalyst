@@ -1,8 +1,9 @@
 import pandas as pd
 
 car_accident = pd.read_csv('data/database_car_accident.csv')
-print(car_accident.info())
+cities = pd.read_csv('data/comuni_italiani.csv', sep=';')
+print(cities.info())
 
-for name in list(car_accident):
+for name in list(cities):
     print(f'For the column {name} we have these unique values: ')
-    print(car_accident[name].unique())
+    print(cities[name].unique())
