@@ -1,17 +1,8 @@
-#Script per scaricare i dati dal sito istat dal 2020 in poi
-import requests
+import pandas as pd
 
-url = 'https://esploradati.istat.it/SDMXWS/rest/data/41_983'
-header = {'Accept': 'application/vnd.sdmx.data+csv;version=1.0.0'}
-params = {
-    'startPeriod' : 2020
-}
+car_accident = pd.read_csv('data/database_car_accident.csv')
+print(car_accident.info())
 
-data = requests.get(url, headers=header, params=params, stream=True)
-data.raise_for_status()
-
-with open("database_car_accident.csv", 'w') as file:
-    file.write(data.text)
-
-
-
+for name in list(car_accident):
+    print(f'For the column {name} we have these unique values: ')
+    print(car_accident[name].unique())
