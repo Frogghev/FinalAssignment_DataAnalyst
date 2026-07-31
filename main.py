@@ -1,8 +1,13 @@
 import pandas as pd
 
 #car_accident = pd.read_csv('data/database_car_accident.csv')
-cities = pd.read_csv('data/comuni_italiani.csv', sep=';')
+cities = pd.read_csv('data/comuni_italiani_2020.csv', sep=';')
 
-print(cities.shape)
+#fix Null value in Comune column
+comune_missing_value = cities[cities['Comune'].isnull()]
+comune_missing_value['Comune'] = 'Torino'
 
-#print(cities[cities['Comune'].isnull()])
+#fix Null value in Cities column
+sigla_missing_value = cities[cities['Sigla automobilistica'].isnull()]
+sigla_missing_value['Sigla automobilistica'] = "NA"
+
