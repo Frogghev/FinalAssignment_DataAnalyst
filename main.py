@@ -11,3 +11,4 @@ comune_missing_value['Comune'] = 'Torino'
 sigla_missing_value = cities[cities['Sigla automobilistica'].isnull()]
 sigla_missing_value['Sigla automobilistica'] = "NA"
 
+
