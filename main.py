@@ -1,17 +1,25 @@
-#Script per scaricare i dati dal sito istat dal 2020 in poi
-import requests
-
-url = 'https://esploradati.istat.it/SDMXWS/rest/data/41_983'
-header = {'Accept': 'application/vnd.sdmx.data+csv;version=1.0.0'}
-params = {
-    'startPeriod' : 2020
-}
-
-data = requests.get(url, headers=header, params=params, stream=True)
-data.raise_for_status()
-
-with open("database_car_accident.csv", 'w') as file:
-    file.write(data.text)
+import numpy as np
+import pandas as pd
+from scipy import stats
 
 
+complete_dataset = pd.read_csv('data/complete_dataset.csv')
 
+cities_with_most_incidents = complete_dataset[complete_dataset['Anno']==2020][complete_dataset['DATA_TYPE']=='ROADACC']
+cities_with_most_incidents.sort_values(by=['OBS_VALUE'], ascending=False)
+
+# fit a simple linear regression manually
+slope, intercept, r, p, se = stats.linregress(
+    cities_with_most_incidents['Popolazione legale'],
+    cities_with_most_incidents['OBS_VALUE']
+)
+
+predicted = slope * cities_with_most_incidents['Popolazione legale'] + intercept
+residuals = cities_with_most_incidents['OBS_VALUE'] - predicted
+
+# grab the 6 with the largest absolute residual
+outliers = cities_with_most_incidents.reindex(
+    residuals.abs().sort_values(ascending=False).index
+).head(6)
+
+print(outliers)
